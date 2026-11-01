@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Kasku">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Kasku</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ GERBANG: Kunci Akses / PIN ============ -->
+<section id="gerbang" class="gerbang" hidden>
+  <div class="g-card glass">
+    <div class="logo-app" aria-hidden="true"></div>
+    <h1 id="g-judul">Kasku</h1>
+    <p id="g-sub" class="sub"></p>
+
+    <div id="g-kunci-wrap" class="g-kunci" hidden>
+      <input id="g-kunci" type="password" placeholder="Tempel Kunci Akses di sini" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button id="g-lanjut" class="btn-utama" type="button"><span>Lanjut</span></button>
+    </div>
+
+    <div id="g-pin-wrap" hidden>
+      <div class="dots" id="g-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="keypad" id="g-keypad">
+        <button type="button" data-aksi="tombol" data-k="1">1</button>
+        <button type="button" data-aksi="tombol" data-k="2">2</button>
+        <button type="button" data-aksi="tombol" data-k="3">3</button>
+        <button type="button" data-aksi="tombol" data-k="4">4</button>
+        <button type="button" data-aksi="tombol" data-k="5">5</button>
+        <button type="button" data-aksi="tombol" data-k="6">6</button>
+        <button type="button" data-aksi="tombol" data-k="7">7</button>
+        <button type="button" data-aksi="tombol" data-k="8">8</button>
+        <button type="button" data-aksi="tombol" data-k="9">9</button>
+        <span></span>
+        <button type="button" data-aksi="tombol" data-k="0">0</button>
+        <button type="button" data-aksi="tombol" data-k="x" aria-label="Hapus">⌫</button>
+      </div>
+    </div>
+
+    <div id="g-err" class="err" role="alert"></div>
+    <button id="g-lupa" class="link" type="button" hidden>Lupa PIN? Atur ulang di perangkat ini</button>
+    <button id="g-batal" class="link" type="button" hidden>Batal</button>
+  </div>
+</section>
+
+<!-- ============ APLIKASI ============ -->
+<div id="utama" class="kolom" hidden>
+  <header class="topbar">
+    <div>
+      <div class="brand">Kasku</div>
+      <div class="brand-sub" id="top-sub">Catatan keuanganmu</div>
+    </div>
+    <button class="ikon-btn" id="btn-refresh" data-aksi="refresh" aria-label="Muat ulang data">
+      <svg viewBox="0 0 24 24" class="ic"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg>
+    </button>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <!-- Filter periode (dipakai di Beranda & Analisis) -->
+  <div id="periode-bar" class="periode">
+    <div class="chips scroll" id="periode-chips">
+      <button class="chip" data-aksi="periode" data-p="hari">Hari ini</button>
+      <button class="chip" data-aksi="periode" data-p="minggu">Minggu ini</button>
+      <button class="chip" data-aksi="periode" data-p="bulan">Bulan ini</button>
+      <button class="chip" data-aksi="periode" data-p="custom">Kustom</button>
+    </div>
+    <div id="custom-wrap" class="custom" hidden>
+      <label>Dari <input type="date" id="cu-dari"></label>
+      <label>Sampai <input type="date" id="cu-sampai"></label>
+    </div>
+  </div>
+
+  <main>
+    <!-- BERANDA -->
+    <section id="tab-beranda" class="tab" hidden></section>
+
+    <!-- RIWAYAT -->
+    <section id="tab-riwayat" class="tab" hidden>
+      <div class="cari glass">
+        <svg viewBox="0 0 24 24" class="ic"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="rw-q" type="search" placeholder="Cari kategori, sumber, catatan…" autocomplete="off">
+      </div>
+      <div class="chips scroll" id="rw-jenis">
+        <button class="chip" data-aksi="rw-jenis" data-v="">Semua</button>
+        <button class="chip" data-aksi="rw-jenis" data-v="pemasukan">Pemasukan</button>
+        <button class="chip" data-aksi="rw-jenis" data-v="pengeluaran">Pengeluaran</button>
+      </div>
+      <div class="filter-grid">
+        <label>Kategori
+          <select id="rw-kat"><option value="">Semua kategori</option></select>
+        </label>
+        <label>Dari
+          <input type="date" id="rw-dari">
+        </label>
+        <label>Sampai
+          <input type="date" id="rw-sampai">
+        </label>
+      </div>
+      <div id="rw-info" class="info-kecil"></div>
+      <div id="rw-list"></div>
+    </section>
+
+    <!-- ANALISIS -->
+    <section id="tab-analisis" class="tab" hidden>
+      <div id="an-kosong"></div>
+      <div id="an-isi">
+        <div class="kartu glass">
+          <h3>Pengeluaran per kategori</h3>
+          <div class="chart-box donut"><canvas id="ch-kategori"></canvas></div>
+          <div id="legend-kat" class="legend"></div>
+        </div>
+        <div class="kartu glass">
+          <div class="kartu-head">
+            <h3>Tren</h3>
+            <div class="seg kecil" id="seg-tren" data-v="harian">
+              <button type="button" data-aksi="tren" data-v="harian">Harian</button>
+              <button type="button" data-aksi="tren" data-v="bulanan">Bulanan</button>
+              <span class="seg-thumb"></span>
+            </div>
+          </div>
+          <div id="tren-ket" class="info-kecil"></div>
+          <div class="chart-box"><canvas id="ch-tren"></canvas></div>
+        </div>
+        <div class="kartu glass">
+          <h3>Pemasukan vs pengeluaran</h3>
+          <div class="chart-box pendek"><canvas id="ch-banding"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETELAN -->
+    <section id="tab-setelan" class="tab" hidden>
+      <div class="kartu glass">
+        <h3>Spreadsheet</h3>
+        <p class="sub">Semua transaksi tersimpan langsung di Google Sheets-mu.</p>
+        <a id="link-sheet" class="btn-sekunder" href="#" target="_blank" rel="noopener">Buka spreadsheet</a>
+      </div>
+      <div class="kartu glass">
+        <h3>Keamanan</h3>
+        <p class="sub">PIN hanya mengunci layar aplikasi di HP ini. Data di spreadsheet dilindungi Kunci Akses.</p>
+        <button class="btn-sekunder" data-aksi="ubahpin">Ubah PIN</button>
+        <button class="btn-sekunder" data-aksi="kunci-sekarang">Kunci aplikasi sekarang</button>
+      </div>
+      <div class="kartu glass" id="kartu-instal">
+        <h3>Pasang di layar utama</h3>
+        <p class="sub" id="instal-teks">Android (Chrome): menu ⋮ lalu "Instal aplikasi". iPhone (Safari): tombol Bagikan lalu "Tambah ke Layar Utama".</p>
+        <button class="btn-sekunder" id="btn-instal" data-aksi="instal" hidden>Pasang sekarang</button>
+      </div>
+      <div class="kartu glass">
+        <h3>Perangkat ini</h3>
+        <p class="sub">Menghapus Kunci Akses, PIN, dan salinan data dari HP ini. Data di spreadsheet tidak ikut terhapus.</p>
+        <button class="btn-bahaya" data-aksi="reset-perangkat">Keluar &amp; hapus data lokal</button>
+      </div>
+      <p class="info-kecil tengah">Kasku v1.0</p>
+    </section>
+  </main>
+</div>
+
+<!-- ============ NAVIGASI BAWAH ============ -->
+<nav id="nav" class="nav" hidden>
+  <button data-aksi="tab" data-t="beranda" class="nav-i" aria-label="Beranda">
+    <svg viewBox="0 0 24 24" class="ic"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Beranda</span>
+  </button>
+  <button data-aksi="tab" data-t="riwayat" class="nav-i" aria-label="Riwayat">
+    <svg viewBox="0 0 24 24" class="ic"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Riwayat</span>
+  </button>
+  <div class="nav-tengah">
+    <button id="fab" class="fab" data-aksi="tambah" aria-label="Tambah transaksi">
+      <svg viewBox="0 0 24 24" class="ic"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </div>
+  <button data-aksi="tab" data-t="analisis" class="nav-i" aria-label="Analisis">
+    <svg viewBox="0 0 24 24" class="ic"><path d="M5 20V11M12 20V4M19 20v-6"/></svg><span>Analisis</span>
+  </button>
+  <button data-aksi="tab" data-t="setelan" class="nav-i" aria-label="Setelan">
+    <svg viewBox="0 0 24 24" class="ic"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span>Setelan</span>
+  </button>
+</nav>
+
+<!-- ============ FORM TRANSAKSI ============ -->
+<div id="sheet" class="sheet-wrap" hidden>
+  <div class="sheet-backdrop" data-aksi="tutup"></div>
+  <form class="sheet" id="form" novalidate autocomplete="off">
+    <div class="grip"></div>
+    <div class="sheet-head">
+      <h2 id="form-judul">Tambah Transaksi</h2>
+      <button type="button" class="ikon-btn" data-aksi="tutup" aria-label="Tutup">
+        <svg viewBox="0 0 24 24" class="ic"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="seg" id="seg-jenis" data-v="pengeluaran">
+      <button type="button" data-aksi="jenis" data-v="pengeluaran">Pengeluaran</button>
+      <button type="button" data-aksi="jenis" data-v="pemasukan">Pemasukan</button>
+      <span class="seg-thumb"></span>
+    </div>
+
+    <label class="nominal-box" id="nominal-box">
+      <span>Rp</span>
+      <input id="f-nominal" inputmode="numeric" pattern="[0-9]*" placeholder="0" aria-label="Nominal">
+    </label>
+    <div class="err" id="err-nominal"></div>
+
+    <div class="field">
+      <div class="lbl">Kategori</div>
+      <div class="chips wrap" id="chips-kategori"></div>
+      <input id="f-kategori-baru" class="in-baru" placeholder="Nama kategori baru" maxlength="60" hidden>
+      <div class="err" id="err-kategori"></div>
+    </div>
+
+    <div class="field">
+      <div class="lbl">Sumber <em>(opsional)</em></div>
+      <div class="chips wrap" id="chips-sumber"></div>
+      <input id="f-sumber-baru" class="in-baru" placeholder="Nama sumber baru" maxlength="60" hidden>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <div class="lbl">Tanggal
+          <span class="mini">
+            <button type="button" data-aksi="tgl" data-n="0">Hari ini</button>
+            <button type="button" data-aksi="tgl" data-n="-1">Kemarin</button>
+          </span>
+        </div>
+        <input type="date" id="f-tanggal">
+        <div class="err" id="err-tanggal"></div>
+      </div>
+      <div class="field">
+        <div class="lbl">Catatan <em>(opsional)</em></div>
+        <input id="f-catatan" maxlength="200" placeholder="Mis. makan siang">
+      </div>
+    </div>
+
+    <div class="aksi">
+      <button type="button" class="btn-hapus" id="btn-hapus" data-aksi="hapus" hidden>Hapus</button>
+      <button type="submit" class="btn-utama" id="btn-simpan"><span>Simpan</span></button>
+    </div>
+  </form>
+</div>
+
+<!-- ============ DIALOG KONFIRMASI ============ -->
+<div id="dialog" class="dialog-wrap" hidden>
+  <div class="dialog-backdrop"></div>
+  <div class="dialog glass" role="alertdialog" aria-modal="true">
+    <h3 id="dlg-judul"></h3>
+    <p id="dlg-isi"></p>
+    <div class="dlg-aksi">
+      <button class="btn-sekunder" id="dlg-batal" type="button">Batal</button>
+      <button class="btn-bahaya" id="dlg-ok" type="button">Ya</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous" defer></script>
+<script src="config.js"></script>
+<script src="app.js" defer></script>
+</body>
+</html>
